@@ -20,6 +20,7 @@ public class Security {
     private String issuerId;
     private String ISIN;
     private String BCUSIP;
+    private EsgSignal esgSignal;
 
     //
     // constructors

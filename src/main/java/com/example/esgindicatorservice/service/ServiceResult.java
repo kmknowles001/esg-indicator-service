@@ -19,8 +19,6 @@ public class ServiceResult {
     private final String createdDt;
 
     private List<ServiceResultItem> items =new ArrayList<>();
-    private int records = 0;
-    private int recordsProcessed = 0;
 
     // constructor
     public ServiceResult(){
@@ -62,10 +60,10 @@ public class ServiceResult {
     public boolean getSuccess(){return this.success;}
     public void setSuccess(boolean value){this.success = value;}
     public String getCreatedDt(){return this.createdDt;}
-    public int getRecords(){return this.records;}
-    public void setRecords(int value){this.records = value;}
-    public int getRecordsProcessed(){return this.recordsProcessed;}
-    public void setRecordsProcessed(int value){this.recordsProcessed = value;}
+//    public int getRecords(){return this.records;}
+//    public void setRecords(int value){this.records = value;}
+//    public int getRecordsProcessed(){return this.recordsProcessed;}
+//    public void setRecordsProcessed(int value){this.recordsProcessed = value;}
 
 }
 

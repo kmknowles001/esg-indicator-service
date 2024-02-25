@@ -1,9 +1,8 @@
-package com.example.esgindicatorservice.entity;
+package com.example.esgindicatorservice.collection;
 
-import com.example.esgindicatorservice.service.ServiceResultItem;
+import com.example.esgindicatorservice.entity.Position;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class PositionCollection {
     //
 
     private List<Position> positionList;
-    private boolean lookThrough;
+    private String positionSource;
     private Double totalMarketValue = 0.0;
 
     //

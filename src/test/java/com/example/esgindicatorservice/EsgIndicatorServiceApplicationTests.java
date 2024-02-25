@@ -1,6 +1,7 @@
 package com.example.esgindicatorservice;
 
 import com.example.esgindicatorservice.service.EsgIndicatorService;
+import com.example.esgindicatorservice.service.ServiceResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,13 +14,18 @@ class EsgIndicatorServiceApplicationTests {
 
 
     @Test
-    void testRun() {
+    void simulateEsgIndicatorEndpoint() {
 
-        String portfolioId = "001_34352";
+        try {
+            String portfolioId = "001_34352";
+            String asOfDate = "25-FEB-2024";
 
-        EsgIndicatorService service = new EsgIndicatorService();
+            EsgIndicatorService service = new EsgIndicatorService();
+            ServiceResult result = service.calculateEsgIndicators(portfolioId, asOfDate, true);
 
-        service.calculateEsgIndicators(portfolioId, true);
-
+            assert(result.getSuccess());
+        }catch (Exception e){
+            assert(false);
+        }
     }
 }

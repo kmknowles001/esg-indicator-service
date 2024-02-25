@@ -1,30 +1,33 @@
 package com.example.esgindicatorservice.entity;
-
 import com.example.esgindicatorservice.service.ServiceResult;
 import com.example.esgindicatorservice.service.ServiceResultItem;
+import lombok.Data;
 
-public class CarbonIndicator extends BaseEsgIndicator {
+@Data
+public class GhgIndicator extends BaseEsgIndicator {
 
     //
-    // constructors
+    // constructor
     //
-    public CarbonIndicator(){
-        super("carbonfootprint","pai");
+    public GhgIndicator(){
+        super("ghgemissions", "pai");
     }
 
     //
     // methods
+    //
     @Override
     public Double calc(Portfolio portfolio, ServiceResult result) {
         try {
+
             Double calcValue = 0.0;
             EsgSignal signal;
             ServiceResultItem calcResult = new ServiceResultItem(portfolio,"calculating: " + this.getIndicatorCode());
 
             for (Position pos : portfolio.getPositions()) {
                 signal = pos.getSecurity().getEsgSignal();
-                calcValue = +(pos.getWeight() * signal.getEsgSignalFour() * signal.getEsgSignalTwo());
-                calcResult.add("[security]: " + pos.getSecurity().getIssuerName() + ",[weight]:" + pos.getWeight() + ",[esgSignalFour]: " + signal.getEsgSignalFour() + ",[esgSignalTwo]:" +  signal.getEsgSignalTwo());
+                calcValue = +(pos.getWeight() * signal.getEsgSignalOne() * signal.getEsgSignalThree());
+                calcResult.add("[security]: " + pos.getSecurity().getIssuerName() + ",[weight]:" + pos.getWeight() + ",[esgSignalOne]: " + signal.getEsgSignalOne() + ",[esgSignalThree]:" +  signal.getEsgSignalThree());
             }
             this.setIndicatorValue(calcValue);
             calcResult.add("[" + this.getIndicatorCode() + "]" + " for [portfolio]:" + portfolio.getPortfolioId() + " has a value of [" + this.getIndicatorValue().toString() + "]");

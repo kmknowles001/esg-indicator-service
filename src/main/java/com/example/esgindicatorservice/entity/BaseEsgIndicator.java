@@ -2,11 +2,10 @@ package com.example.esgindicatorservice.entity;
 
 
 import com.example.esgindicatorservice.service.ServiceResult;
-import com.example.esgindicatorservice.service.ServiceResultItem;
 import lombok.Data;
 
 @Data
-public abstract class ESGIndicator {
+public abstract class BaseEsgIndicator {
 
     //
     // declarations
@@ -14,11 +13,12 @@ public abstract class ESGIndicator {
     private String indicatorId;
     private String indicatorType;
     private String indicatorCode;
+    private Double indicatorValue = 0.0;
 
     //
     // constructors
     //
-    public ESGIndicator(String code, String type){
+    public BaseEsgIndicator(String code, String type){
         indicatorType = type;
         indicatorCode = code;
         indicatorId = type + "-" + code + "-" + java.util.UUID.randomUUID().toString();
@@ -27,11 +27,7 @@ public abstract class ESGIndicator {
     //
     // methods
     //
-    public void calc(){
-
-    }
-
-    public void calc(ServiceResult result){
-
+    public Double calc(Portfolio portfolio, ServiceResult result){
+        return 0.0;
     }
 }

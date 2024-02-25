@@ -1,5 +1,6 @@
 package com.example.esgindicatorservice.service;
 
+import com.example.esgindicatorservice.common.Util;
 import com.example.esgindicatorservice.entity.Portfolio;
 import com.example.esgindicatorservice.entity.Position;
 import com.example.esgindicatorservice.entity.Security;
@@ -12,6 +13,7 @@ public class ServiceResultItem {
 
     private String portfolioId;
     private String securityId;
+    private String timeStamp = Util.nowTimeStampAsStr();
     private List<String> message = new ArrayList<>();
     private boolean success = true;
 
