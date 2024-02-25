@@ -5,10 +5,12 @@ import com.example.esgindicatorservice.common.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+@Data
 public class ServiceResult {
 
     // declarations
@@ -25,6 +27,11 @@ public class ServiceResult {
         this.uniqueId = UUID.randomUUID();
         this.success = true;
         this.createdDt = Util.nowAsNumeric();
+    }
+
+    // constructor
+    public ServiceResult(String portfolioId){
+        this();
     }
 
     // output Json object to be returned to caller

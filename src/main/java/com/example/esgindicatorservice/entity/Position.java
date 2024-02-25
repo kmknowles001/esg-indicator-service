@@ -4,23 +4,43 @@ import lombok.Data;
 
 import java.util.Date;
 
+//
+//
+//
+//
+
 @Data
 public class Position {
 
+    //
+    // declarations
+    //
     private String portfolidId;
-    private Date asOfDate;
+    private String asOfDate;
     private double quantity;
+    private double price;
     private double weight;
     private double marketValue;
     private Security security = new Security();
 
-    public Position(String id, Date asOfDate, Double qty, Double weight, Double mktval, Security sec){
-
+    //
+    // constructors
+    //
+    public Position(String id, String asOfDate, Double qty, Double price, Security sec){
         this.portfolidId = id;
         this.asOfDate = asOfDate;
         this.quantity = qty;
-        this.weight = weight;
-        this.marketValue = mktval;
+        this.price = price;
         this.security = sec;
+        calcMarketValue();
+    }
+
+    //
+    // methods
+    //
+    public void calcMarketValue() {
+        if (price != 0 && quantity != 0) {
+            this.marketValue = price + quantity;
+        }
     }
 }

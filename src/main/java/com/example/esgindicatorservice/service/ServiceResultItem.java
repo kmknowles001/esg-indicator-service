@@ -1,6 +1,8 @@
 package com.example.esgindicatorservice.service;
 
+import com.example.esgindicatorservice.entity.Portfolio;
 import com.example.esgindicatorservice.entity.Position;
+import com.example.esgindicatorservice.entity.Security;
 import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,19 +10,22 @@ import java.util.List;
 @Data
 public class ServiceResultItem {
 
-    private String positionKey;
-    private String securityKey;
-    private String portfolioKey;
-    private int positionHashCode;
-
-    private boolean success = true;
+    private String portfolioId;
+    private String securityId;
     private List<String> message = new ArrayList<>();
+    private boolean success = true;
 
-    public ServiceResultItem(Position pos, int positionHashCode){
-        this.positionHashCode = positionHashCode;
-    }
-
+    public ServiceResultItem(){}
     public ServiceResultItem(String message){
+        this.message.add(message);
+    }
+    public ServiceResultItem(Portfolio porfolio, String message){
+        this.portfolioId = porfolio.getPortfolioId();
+        this.message.add(message);
+    }
+    public ServiceResultItem(Portfolio porfolio, Security sec, String message){
+        this.portfolioId = porfolio.getPortfolioId();
+        this.securityId = sec.getSecurityId();
         this.message.add(message);
     }
 
