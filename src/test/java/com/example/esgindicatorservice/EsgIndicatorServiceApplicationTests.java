@@ -23,7 +23,7 @@ class EsgIndicatorServiceApplicationTests {
             EsgIndicatorService service = new EsgIndicatorService();
             ServiceResult result = service.calculateEsgIndicators(portfolioId, asOfDate, true);
 
-            assert(result.getSuccess());
+            assert(result.isSuccess());
         }catch (Exception e){
             assert(false);
         }

@@ -15,15 +15,18 @@ public class ServiceResponse {
         Gson gson = new Gson();
         JsonObject jsResponse = new JsonObject();
 
-        jsResponse.addProperty("service-id",service.getServiceId().toString());
-        jsResponse.addProperty("service-instance",service.getServiceInstanceId().toString());
-        jsResponse.addProperty("service-name",service.getServiceName().toString());
-        jsResponse.addProperty("service-version",service.getServiceVersion().toString());
-        jsResponse.addProperty("response-dt", Util.nowAsDateTimeStrBQ());
-        jsResponse.addProperty("response-message",primaryMessage);
+
+        jsResponse.addProperty("serviceId",service.getServiceId().toString());
+        jsResponse.addProperty("serviceInstance",service.getServiceInstanceId().toString());
+        jsResponse.addProperty("serviceName",service.getServiceName().toString());
+        jsResponse.addProperty("serviceVersion",service.getServiceVersion().toString());
+        jsResponse.addProperty("responseDt", Util.nowAsDateTimeStrBQ());
+        jsResponse.addProperty("responseMessage",primaryMessage);
         if (result != null){
-            jsResponse.addProperty("response-status", result.getSuccess());
-            jsResponse.add("response-detail",result.getJSON());
+            jsResponse.addProperty("portfolioId", result.getPortfolioId());
+            jsResponse.addProperty("asOfDate", result.getAsOfDate());
+            jsResponse.addProperty("responseStatus", result.isSuccess());
+            jsResponse.add("responseDetail",result.getJSON());
         }
         return new ResponseEntity<String>(jsResponse.toString(), HttpStatus.OK);
     }

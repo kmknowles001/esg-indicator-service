@@ -6,18 +6,19 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 @Data
 public class ServiceResult {
 
     // declarations
     private boolean success;
-    private final UUID uniqueId;
-    private final String createdDt;
-
+    private UUID uniqueId;
+    private String asOfDate;
+    private String portfolioId;
+    private String createdDt;
     private List<ServiceResultItem> items =new ArrayList<>();
 
     // constructor
@@ -28,8 +29,10 @@ public class ServiceResult {
     }
 
     // constructor
-    public ServiceResult(String portfolioId){
+    public ServiceResult(String portfolioId, String asOfDate){
         this();
+        this.portfolioId = portfolioId;
+        this.asOfDate = asOfDate;
     }
 
     // output Json object to be returned to caller
@@ -43,7 +46,7 @@ public class ServiceResult {
             JsonObject convertedObject = new Gson().fromJson(strJson, JsonObject.class);
             jsArray.add(convertedObject);
         }
-        returnJson.add("response-detail-items",jsArray);
+        returnJson.add("responseDetailItems",jsArray);
         return returnJson;
     }
 
@@ -55,16 +58,13 @@ public class ServiceResult {
         items.add(item);
     }
 
-    // accessor methods
-    public UUID getUniqueId(){return this.uniqueId;}
-    public boolean getSuccess(){return this.success;}
-    public void setSuccess(boolean value){this.success = value;}
-    public String getCreatedDt(){return this.createdDt;}
-//    public int getRecords(){return this.records;}
-//    public void setRecords(int value){this.records = value;}
-//    public int getRecordsProcessed(){return this.recordsProcessed;}
-//    public void setRecordsProcessed(int value){this.recordsProcessed = value;}
-
+//    // accessor methods
+//    public UUID getUniqueId(){return this.uniqueId;}
+//    public boolean getSuccess(){return this.success;}
+//    public String getPortfoloId(){return this.portfolioId;}
+//    public String getAsOfDate(){return this.asOfDate;}
+//    public void setSuccess(boolean value){this.success = value;}
+//    public String getCreatedDt(){return this.createdDt;}
 }
 
 

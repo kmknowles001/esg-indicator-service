@@ -63,7 +63,7 @@ public class EsgIndicatorRepo {
         );
 
         resultsFromPositionService.add(
-                new Position(portfolioId, asOfDate,200.0,5.532, new Security("EQUITY","APPLE","004-APPLE","US12234358","BAPP45KFS"))
+                new Position(portfolioId, asOfDate,200.0,5.532, new Security("EQUITY","APPLE","004-APPLE","US12234358",""))
         );
 
         return resultsFromPositionService;

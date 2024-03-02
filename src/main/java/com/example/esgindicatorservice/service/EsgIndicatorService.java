@@ -20,37 +20,29 @@ public class EsgIndicatorService extends BaseService {
     //  methods
     //
 
-    // primary method.
+    // primary method to calculate
     public ServiceResult calculateEsgIndicators(String portfolioId, String asOfDate, boolean debug){
 
-        EsgSignalCollection esgSignalCollection = new EsgSignalCollection();
-        ServiceResult result = new ServiceResult(portfolioId);
-        Portfolio portfolio = new Portfolio(portfolioId);
-        ServiceResultItem initialiseServiceResult;
-
-
+        Portfolio portfolio = new Portfolio(portfolioId);   // get portfolio details (Simulate Product Master API)
+        ServiceResult result = new ServiceResult(portfolioId, asOfDate); // return API with response and debug.
 
         // 1. get portfolio including positions (simulate position API)
         portfolio.setPositions(EsgIndicatorRepo.getPositions(portfolio.getPortfolioId() , asOfDate));
-        initialiseServiceResult = new ServiceResultItem(portfolio,"loaded " + portfolio.getPositionCollection().PositionCount() + " positions from " +  portfolio.getPositionCollection().getPositionSource() + " as of " + asOfDate);
-//        result.add(new ServiceResultItem(portfolio,"loaded" + portfolio.getPositionCollection().PositionCount() + " positions from " +  portfolio.getPositionCollection().getPositionSource() + " as of " + asOfDate));
+        result.add(new ServiceResultItem("getPositions","initialisation","loaded " + portfolio.getPositionCollection().PositionCount() + " positions from " +  portfolio.getPositionCollection().getPositionSource() + " as of " + asOfDate));
 
         // 2. get portfolio esg indicators to calculate.
         portfolio.setEsgIndicators(EsgIndicatorRepo.getESGIndicators());
-        initialiseServiceResult.add("found " + portfolio.getEsgIndicators().size() + " esg indicators.");
-//        result.add(new ServiceResultItem(portfolio,"found " + portfolio.getEsgIndicators().size() + " esg indicators."));
+        result.add(new ServiceResultItem("getESGIndicators","initialisation","loaded " + portfolio.getEsgIndicators().size() + " esg signals"));
 
         // 3. get esg issuer signals (simulate esg signals API)
-        esgSignalCollection = EsgIndicatorRepo.getIssuerSignals();
-        initialiseServiceResult.add("found " + esgSignalCollection.Size() + " esg signals.");
-//        result.add(new ServiceResultItem(portfolio,"found esg signals: " + esgSignalCollection.Size()));
-        result.add(initialiseServiceResult);
+        EsgSignalCollection esgSignalCollection = EsgIndicatorRepo.getIssuerSignals();
+        result.add(new ServiceResultItem("getIssuerSignals","initialisation","loaded " + esgSignalCollection.Size() + " esg signals."));
 
         // 4. set each positions security issuer signals
-        portfolio.setIssuerEsgSignals(esgSignalCollection);
+        result.add(portfolio.setIssuerEsgSignals(esgSignalCollection));
 
         // 5. validate
-        validate(portfolio, result);
+        result.add(validate(portfolio));
 
         // 6. calc
         calc(portfolio, result);
@@ -58,36 +50,46 @@ public class EsgIndicatorService extends BaseService {
         return result;
     }
 
+    //
+    // calc esg indicators
+    //
     public boolean calc(Portfolio portfolio, ServiceResult result){
         for ( BaseEsgIndicator indicator : portfolio.getEsgIndicators()){
             indicator.calc(portfolio, result);
-
         }
-        return result.getSuccess();
+        return result.isSuccess();
     }
 
     //
     // validate data position & security data - before we start.
     //
-    public void validate(Portfolio portfolio, ServiceResult result){
+    public ServiceResultItem validate(Portfolio portfolio){
+
+        ServiceResultItem validationResult = new ServiceResultItem("validate","validation","validate security issuer and identifiers.");
+
         for(Position pos : portfolio.getPositions()){
+            Security sec = pos.getSecurity();
+            validationResult.add("validating security " + sec.getIssuerName());
+
             // critical //
-            if (pos.getSecurity().getIssuerId() == null) {
-                result.add(new ServiceResultItem(portfolio, pos.getSecurity(),"security is missing an issuer."));
-                result.setSuccess(false); // critical issue
+            if (sec.getIssuerId() == null) {
+                validationResult.add("[CRITICAL]: Security is missing an issuer.");
+                validationResult.setSuccess(false); // critical issue
             }
-            if (pos.getSecurity().getBCUSIP() == null && pos.getSecurity().getISIN() == null) {
-                result.add(new ServiceResultItem(portfolio, pos.getSecurity(),"security is critical identifiers."));
-                result.setSuccess(false); // critical issue
+            if (sec.getBCUSIP() == null && sec.getISIN() == null) {
+                validationResult.add("[CRITICAL]: Security is missing both critical identifiers.");
+                validationResult.setSuccess(false); // critical issue
             }
 
             // non-critical //
-            if (pos.getSecurity().getISIN() == null) {
-                result.add(new ServiceResultItem(portfolio, pos.getSecurity(),"security is missing an ISIN."));
+            if (sec.getISIN() == null || sec.getISIN().length() == 0) {
+                validationResult.add("[WARNING]: Security is missing an ISIN.");
+//                validationResult.add(new ServiceResultItem(portfolio, pos.getSecurity(),"security is missing an ISIN."));
             }
-            if (pos.getSecurity().getBCUSIP() == null) {
-                result.add(new ServiceResultItem(portfolio, pos.getSecurity(),"security is missing an BCUSIP."));
+            if (sec.getBCUSIP() == null || sec.getBCUSIP().length() == 0) {
+                validationResult.add("[WARNING]: Security is missing an CUSIP.");
             }
         }
+        return validationResult;
     }
 }
