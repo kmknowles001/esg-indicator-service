@@ -17,6 +17,7 @@ public class PositionCollection {
     private List<Position> positionList;
     private String positionSource;
     private Double totalMarketValue = 0.0;
+    private Double excludedTotalMarketValue = 0.0;
 
     //
     // constructors
